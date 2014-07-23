@@ -15,6 +15,7 @@
  */
 package at.wada811.keepscreenon;
 
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,12 +26,16 @@ public class ScreenOffReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent){
-        Log.d("LogUtils", "onReceive");
+        Log.d("LogUtils", "ScreenOffReceiver#onReceive");
         // PowerManager | Android Developers http://developer.android.com/reference/android/os/PowerManager.html
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakelock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, context.getPackageName());
         wakelock.acquire();
         Log.d("LogUtils", "wakelock.acquire");
         wakelock.release();
+        // KeyguardManager.KeyguardLock | Android Developers http://developer.android.com/reference/android/app/KeyguardManager.KeyguardLock.html
+        KeyguardManager km = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock klock = km.newKeyguardLock(context.getPackageName());
+        klock.disableKeyguard();
     }
 }
